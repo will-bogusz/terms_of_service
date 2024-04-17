@@ -1,7 +1,4 @@
-// lib/Cron/LogoutStaleUsers.php
-
 <?php
-
 namespace OCA\TermsOfService\Cron;
 
 use OC\BackgroundJob\TimedJob;
