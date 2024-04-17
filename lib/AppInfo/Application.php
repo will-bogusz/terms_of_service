@@ -44,6 +44,7 @@ use OCP\IUser;
 use OCP\IUserSession;
 use OCP\Notification\IManager;
 use OCP\User\Events\UserDeletedEvent;
+use OCP\User\Events\UserLoggedOutEvent;
 use OCP\User\Events\UserFirstTimeLoggedInEvent;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
@@ -66,6 +67,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(ShowFormEvent::class, RegistrationIntegration::class);
 		$context->registerEventListener(ValidateFormEvent::class, RegistrationIntegration::class);
 		$context->registerEventListener(PassedFormEvent::class, RegistrationIntegration::class);
+		$context->registerEventListener(UserLoggedOutEvent::class, UserLoggedOutListener::class);
 	}
 
 	public function boot(IBootContext $context): void {
