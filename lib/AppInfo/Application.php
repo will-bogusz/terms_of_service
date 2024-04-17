@@ -31,6 +31,7 @@ use OCA\TermsOfService\Checker;
 use OCA\TermsOfService\Filesystem\StorageWrapper;
 use OCA\TermsOfService\Listener\RegistrationIntegration;
 use OCA\TermsOfService\Listener\UserDeletedListener;
+use OCA\TermsOfService\Listener\UserLoggedOutListener;
 use OCA\TermsOfService\Notifications\Notifier;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
