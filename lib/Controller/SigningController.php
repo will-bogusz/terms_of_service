@@ -99,11 +99,8 @@ class SigningController extends Controller {
 			->setObject('terms', '1')
 			->setUser($this->userId);
 
-		// mark all notifications as processed
+		// Mark all notifications as processed …
 		$this->notificationsManager->markProcessed($notification);
-
-		// set session flag indicating terms have been signed
-		$this->session->set('terms_of_service_agreed', true);
 
 		return new JSONResponse();
 	}
@@ -120,9 +117,6 @@ class SigningController extends Controller {
 		$uuid = $this->config->getAppValue(Application::APPNAME, 'term_uuid', '');
 		$this->session->set('term_uuid', $uuid);
 
-		// set session flag indicating terms have been signed publicly
-		$this->session->set('terms_of_service_agreed', true);
-
 		return new JSONResponse();
 	}
 
@@ -133,10 +127,6 @@ class SigningController extends Controller {
 	public function resetAllSignatories(): JSONResponse {
 		$this->signatoryMapper->deleteAllSignatories();
 		$this->config->setAppValue(Application::APPNAME, 'term_uuid', uniqid());
-
-		// Remove the session key after resetting the signatories
-		console.log("Removing session key after resetting signatories!");
-		$this->session->remove('terms_of_service_agreed');
 
 		$notification = $this->notificationsManager->createNotification();
 		$notification->setApp('terms_of_service')

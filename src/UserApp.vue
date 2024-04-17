@@ -136,8 +136,6 @@ export default {
 				generateUrl(url),
 				{ termId: this.termsId },
 			).then(() => {
-				console.log("Created a session flag marking as accepted!");
-
 				window.location.reload()
 			})
 		},
