@@ -8,10 +8,10 @@ use OCP\IUserSession;
 
 class LogoutStaleUsers extends TimedJob {
     /** @var IUserManager */
-    private $userManager;
+    private IUserManager $userManager;
 
     /** @var IUserSession */
-    private $userSession;
+    private IUserSession $userSession;
 
     public function __construct(ITimeFactory $timeFactory, IUserManager $userManager, IUserSession $userSession) {
         parent::__construct($timeFactory);
