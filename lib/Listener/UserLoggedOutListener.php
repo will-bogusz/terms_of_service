@@ -24,10 +24,15 @@ class UserLoggedOutListener implements IEventListener {
     /** @var IGroupManager */
     private $groupManager;
 
-    public function __construct(ISession $session, IConfig $config, IGroupManager $groupManager) {
+    /** @var SignatoryMapper */
+	private $signatoryMapper;
+
+    public function __construct(ISession $session, IConfig $config, IGroupManager $groupManager, SignatoryMapper $signatoryMapper) {
+        
         $this->session = $session;
         $this->config = $config;
         $this->groupManager = $groupManager;
+        $this->signatoryMapper = $signatoryMapper;
     }
 
     private function isExcludedUser(IUser $user): bool {
