@@ -48,6 +48,7 @@ use OCP\User\Events\UserFirstTimeLoggedInEvent;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
 use Psr\Container\ContainerExceptionInterface;
+use OCP\User\Events\UserLoggedOutEvent;
 
 include_once __DIR__ . '/../../vendor/autoload.php';
 
@@ -66,6 +67,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(ShowFormEvent::class, RegistrationIntegration::class);
 		$context->registerEventListener(ValidateFormEvent::class, RegistrationIntegration::class);
 		$context->registerEventListener(PassedFormEvent::class, RegistrationIntegration::class);
+		$context->registerEventListener(UserLoggedOutEvent::class, UserLoggedOutListener::class);
 	}
 
 	public function boot(IBootContext $context): void {

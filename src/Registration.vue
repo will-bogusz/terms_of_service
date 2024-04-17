@@ -151,6 +151,8 @@ export default {
 		acceptTerms() {
 			this.hasSigned = true
 			this.showModal = false
+
+			console.log("Registered and created a session flag marking as accepted!");
 		},
 
 		handleCloseModal() {

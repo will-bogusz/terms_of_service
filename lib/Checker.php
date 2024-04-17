@@ -102,6 +102,13 @@ class Checker {
 			}
 		}
 
+		// Check if the user has agreed to the terms in the current session
+		$sessionKey = 'terms_of_service_agreed';
+		if ($this->session->exists($sessionKey)) {
+			console.log("Found session key, informing that they agreed!");
+			return true;
+		}
+
 		if ($this->isValidWOPIRequest()) {
 			// Richdocuments and Collabora doing WOPI requests for the user
 			return true;
