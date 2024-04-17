@@ -5,6 +5,7 @@
 namespace OCA\TermsOfService\Cron;
 
 use OC\BackgroundJob\TimedJob;
+use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\IUserManager;
 use OCP\IUserSession;
 
@@ -15,7 +16,8 @@ class LogoutStaleUsers extends TimedJob {
     /** @var IUserSession */
     private $userSession;
 
-    public function __construct(IUserManager $userManager, IUserSession $userSession) {
+    public function __construct(ITimeFactory $timeFactory, IUserManager $userManager, IUserSession $userSession) {
+        parent::__construct($timeFactory);
         $this->userManager = $userManager;
         $this->userSession = $userSession;
 

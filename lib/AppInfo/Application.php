@@ -69,14 +69,6 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(ValidateFormEvent::class, RegistrationIntegration::class);
 		$context->registerEventListener(PassedFormEvent::class, RegistrationIntegration::class);
 		$context->registerEventListener(UserLoggedOutEvent::class, UserLoggedOutListener::class);
-
-		$context->registerService('IUserManager', function($c) {
-			return $c->query(IUserManager::class);
-		}, true);
-
-		$context->registerService('IUserSession', function($c) {
-			return $c->query(IUserSession::class);
-		}, true);
 	}
 
 	public function boot(IBootContext $context): void {
