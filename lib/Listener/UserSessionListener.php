@@ -1,0 +1,57 @@
+<?php
+
+declare(strict_types=1);
+
+namespace OCA\TermsOfService\Listener;
+
+use OCP\EventDispatcher\Event;
+use OCP\EventDispatcher\IEventListener;
+use OCP\IConfig;
+use OCP\IGroupManager;
+use OCP\ISession;
+use OCP\IUser;
+use OCP\User\Events\BeforeUserLoggedInEvent;
+use OCP\User\Events\BeforeUserLoggedOutEvent;
+use OCA\TermsOfService\Db\Mapper\SignatoryMapper;
+
+class UserSessionListener implements IEventListener {
+
+    private $session;
+    private $config;
+    private $groupManager;
+    private $signatoryMapper;
+
+    public function __construct(ISession $session, IConfig $config, IGroupManager $groupManager, SignatoryMapper $signatoryMapper) {
+        $this->session = $session;
+        $this->config = $config;
+        $this->groupManager = $groupManager;
+        $this->signatoryMapper = $signatoryMapper;
+    }
+
+    // we may optionally decide to exclude certain user groups from having their ToS signatures reset
+    private function isExcludedUser(IUser $user): bool {
+        // placeholder group to use for now, will eventually integrate to pull from the admin settings
+        $excludedGroups = ['management'];
+        $userGroups = $this->groupManager->getUserGroupIds($user);
+        foreach ($excludedGroups as $groupName) {
+            if (in_array($groupName, $userGroups)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function handle(Event $event): void {
+        // align processing of the signature clear to occur before the user logs in or out
+        if ($event instanceof BeforeUserLoggedInEvent || $event instanceof BeforeUserLoggedOutEvent) {
+            // grab the user that performed the action
+            $user = $event->getUser();
+            if ($this->isExcludedUser($user)) {
+                return;
+            }
+            $this->signatoryMapper->deleteSignatoriesByUser($user);
+        } else {
+            return;
+        }
+    }
+}
