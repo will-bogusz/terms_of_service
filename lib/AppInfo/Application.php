@@ -32,6 +32,7 @@ use OCA\TermsOfService\Filesystem\StorageWrapper;
 use OCA\TermsOfService\Listener\RegistrationIntegration;
 use OCA\TermsOfService\Listener\UserDeletedListener;
 use OCA\TermsOfService\Listener\UserLoggedOutListener;
+use OCA\TermsOfService\Listener\UserLoggedInListener;
 use OCA\TermsOfService\Notifications\Notifier;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -46,6 +47,7 @@ use OCP\IUserSession;
 use OCP\Notification\IManager;
 use OCP\User\Events\UserDeletedEvent;
 use OCP\User\Events\UserLoggedOutEvent;
+use OCP\User\Events\UserLoggedInEvent;
 use OCP\User\Events\UserFirstTimeLoggedInEvent;
 use OCP\Util;
 use Psr\Log\LoggerInterface;
@@ -69,6 +71,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(ValidateFormEvent::class, RegistrationIntegration::class);
 		$context->registerEventListener(PassedFormEvent::class, RegistrationIntegration::class);
 		$context->registerEventListener(UserLoggedOutEvent::class, UserLoggedOutListener::class);
+		$context->registerEventListener(UserLoggedInEvent::class, UserLoggedInListener::class);
 	}
 
 	public function boot(IBootContext $context): void {
