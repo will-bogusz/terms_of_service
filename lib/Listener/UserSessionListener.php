@@ -10,8 +10,8 @@ use OCP\IConfig;
 use OCP\IGroupManager;
 use OCP\ISession;
 use OCP\IUser;
-use OCP\User\Events\BeforeUserLoggedInEvent;
-use OCP\User\Events\BeforeUserLoggedOutEvent;
+use OCP\User\Events\UserLoggedInEvent;
+use OCP\User\Events\UserLoggedOutEvent;
 use OCA\TermsOfService\Db\Mapper\SignatoryMapper;
 
 class UserSessionListener implements IEventListener {
@@ -43,7 +43,7 @@ class UserSessionListener implements IEventListener {
 
     public function handle(Event $event): void {
         // align processing of the signature clear to occur before the user logs in or out
-        if ($event instanceof BeforeUserLoggedInEvent || $event instanceof BeforeUserLoggedOutEvent) {
+        if ($event instanceof UserLoggedInEvent || $event instanceof UserLoggedOutEvent) {
             // grab the user that performed the action
             $user = $event->getUser();
             if ($this->isExcludedUser($user)) {
