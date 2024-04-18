@@ -45,15 +45,6 @@ class UserLoggedOutListener implements IEventListener {
             }
         }
 
-        // check if the user's email ends with a specific domain
-        $excludedDomains = ['@foxguardsolutions.com'];
-        $userEmail = $user->getSystemEMailAddress();
-        foreach ($excludedDomains as $domain) {
-            if (str_ends_with($userEmail, $domain)) {
-                return true;
-            }
-        }
-
         return false;
     }
 
