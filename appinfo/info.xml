@@ -32,10 +32,6 @@ This product includes GeoLite2 data created by MaxMind, available from [maxmind.
 		<nextcloud min-version="27" max-version="30" />
 	</dependencies>
 
-	<background-jobs>
-        <job>OCA\TermsOfService\Cron\LogoutStaleUsers</job>
-    </background-jobs>
-
 	<repair-steps>
 		<install>
 			<step>OCA\TermsOfService\Migration\CreateNotifications</step>
