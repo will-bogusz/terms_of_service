@@ -37,9 +37,9 @@ class UserSessionListener implements IEventListener {
     private function isExcludedUser(IUser $user): bool {
         // pull from the admin settings
         $excludedGroups = $this->config->getAppValue(Application::APPNAME, 'excluded_groups', []);
-        $this->logger->info('Excluded groups fetched: ' . json_encode($excludedGroups));
+        $this->logger->info('Excluded groups fetched: ' . json_encode($excludedGroups) . ' Type: ' . gettype($excludedGroups));
         $excludedGroups = array_filter(array_map('trim', explode(',', $excludedGroups)));
-        $this->logger->info('Excluded groups after processing: ' . json_encode($excludedGroups));
+        $this->logger->info('Excluded groups after processing: ' . json_encode($excludedGroups) . ' Type: ' . gettype($excludedGroups));
         
 
         if (empty($excludedGroups)) {
