@@ -53,7 +53,8 @@ class UserSessionListener implements IEventListener {
         }
 
         $userGroups = $this->groupManager->getUserGroupIds($user);
-        return array_intersect($excludedGroups, $userGroups) !== [];
+        $intersectedGroups = array_intersect($excludedGroups, $userGroups);
+        return !empty($intersectedGroups);
     }
 
     public function handle(Event $event): void {

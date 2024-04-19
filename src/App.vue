@@ -208,11 +208,11 @@ export default {
 				// added two new fields to accommodate the new 'prompt every login' feature
 				this.showOnEveryLogin = response.data.tos_on_every_login === '1'
 
-				// this.excludedGroups = response.data.excluded_groups
-				this.excludedGroups = response.data.excluded_groups.map(group => ({
-                    value: group.id,
-                    label: group.name,
-                }))
+				this.excludedGroups = response.data.excluded_groups
+				// this.excludedGroups = response.data.excluded_groups.map(group => ({
+                //     value: group.id,
+                //     label: group.name,
+                // }))
 				Object.keys(this.countries).forEach((countryCode) => {
 					this.countryOptions.push({
 						value: countryCode,

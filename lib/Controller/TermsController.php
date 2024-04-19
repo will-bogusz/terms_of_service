@@ -64,6 +64,9 @@ class TermsController extends Controller {
 	/** @var IGroupManager */
 	private $groupManager;
 
+	/** @var LoggerInterface */
+	private $logger;
+
 	public function __construct(string $appName,
 								IRequest $request,
 								IFactory $factory,
@@ -75,7 +78,8 @@ class TermsController extends Controller {
 								Checker $checker,
 								IConfig $config,
 								IEventDispatcher $eventDispatcher,
-								IGroupManager $groupManager
+								IGroupManager $groupManager,
+								LoggerInterface $logger
 	) {
 		parent::__construct($appName, $request);
 		$this->factory = $factory;
@@ -88,6 +92,7 @@ class TermsController extends Controller {
 		$this->config = $config;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->groupManager = $groupManager;
+		$this->logger = $logger;
 	}
 
 	/**
@@ -122,7 +127,9 @@ class TermsController extends Controller {
 			'tos_on_public_shares' => $this->config->getAppValue(Application::APPNAME, 'tos_on_public_shares', '0'),
 			'tos_for_users' => $this->config->getAppValue(Application::APPNAME, 'tos_for_users', '1'),
 			'tos_on_every_login' => $this->config->getAppValue(Application::APPNAME, 'tos_on_every_login', '0'),
-			'excluded_groups' => $this->config->getAppValue(Application::APPNAME, 'excluded_groups', '[]'),
+			'excluded_groups' => $this->config->getAppValue(Application::APPNAME, 'excluded_groups', []),
+			// log the excluded groups and their type
+			$this->logger->info('Excluded groups: ' . json_encode($this->config->getAppValue(Application::APPNAME, 'excluded_groups', [])) . ' Type: ' . gettype($this->config->getAppValue(Application::APPNAME, 'excluded_groups', []))),
 		];
 		return new JSONResponse($response);
 	}
