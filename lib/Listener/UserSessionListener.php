@@ -36,9 +36,7 @@ class UserSessionListener implements IEventListener {
     // we may optionally decide to exclude certain user groups from having their ToS signatures reset
     private function isExcludedUser(IUser $user): bool {
         // pull from the admin settings
-        $excludedGroups = $this->config->getAppValue(Application::APPNAME, 'excluded_groups', '[]');
-        $this->logger->info('Excluded groups fetched: ' . $excludedGroups . ' Type: ' . gettype($excludedGroups));
-        
+        $excludedGroups = $this->config->getAppValue(Application::APPNAME, 'excluded_groups', '[]');        
         // decode the JSON string into an array
         $excludedGroups = json_decode($excludedGroups, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
@@ -46,14 +44,13 @@ class UserSessionListener implements IEventListener {
             return false;
         }
 
-        $this->logger->info('Excluded groups after decoding: ' . json_encode($excludedGroups) . ' Type: ' . gettype($excludedGroups));
-
         if (empty($excludedGroups)) {
             return false;
         }
 
-        $userGroups = $this->groupManager->getUserGroupIds($user);
-        $intersectedGroups = array_intersect($excludedGroups, $userGroups);
+        $userGroupIds = $this->groupManager->getUserGroupIds($user);
+        $excludedGroupIds = array_column($excludedGroups, 'label');
+        $intersectedGroups = array_intersect($excludedGroupIds, $userGroupIds);
         return !empty($intersectedGroups);
     }
 
