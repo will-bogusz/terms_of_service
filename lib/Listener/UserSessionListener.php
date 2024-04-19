@@ -15,6 +15,8 @@ use OCP\User\Events\UserLoggedInEvent;
 use OCP\User\Events\UserLoggedOutEvent;
 use OCA\TermsOfService\Db\Mapper\SignatoryMapper;
 
+use Psr\Log\LoggerInterface;
+
 class UserSessionListener implements IEventListener {
 
     private $session;
