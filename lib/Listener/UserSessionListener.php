@@ -46,9 +46,9 @@ class UserSessionListener implements IEventListener {
 
     public function handle(Event $event): void {
         // check if the feature to show on every login is enabled
-        console.log($this->config->getAppValue(Application::APPNAME, 'show_on_every_login', '0'));
-        if ($this->config->getAppValue(Application::APPNAME, 'show_on_every_login', '0') === '1') {
-            console.log('show_on_every_login is enabled');
+        console.log($this->config->getAppValue(Application::APPNAME, 'tos_on_every_login', '0'));
+        if ($this->config->getAppValue(Application::APPNAME, 'tos_on_every_login', '0') === '1') {
+            console.log('tos_on_every_login is enabled');
             // align processing of the signature clear to occur when the user logs in or out
             if ($event instanceof UserLoggedInEvent || $event instanceof UserLoggedOutEvent) {
                 // grab the user that performed the action
