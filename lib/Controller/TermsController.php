@@ -132,7 +132,7 @@ class TermsController extends Controller {
 			'excluded_groups' => json_decode($this->config->getAppValue(Application::APPNAME, 'excluded_groups', '[]'), true),
 		];
 		// log the excluded groups and their type
-		$this->logger->info('Excluded groups: ' . json_decode($this->config->getAppValue(Application::APPNAME, 'excluded_groups', '[]'), true) . ' Type: ' . gettype(json_decode($this->config->getAppValue(Application::APPNAME, 'excluded_groups', '[]'), true)))
+		$this->logger->info('Excluded groups: ' . json_decode($this->config->getAppValue(Application::APPNAME, 'excluded_groups', '[]'), true) . ' Type: ' . gettype(json_decode($this->config->getAppValue(Application::APPNAME, 'excluded_groups', '[]'), true)));
 		return new JSONResponse($response);
 	}
 
