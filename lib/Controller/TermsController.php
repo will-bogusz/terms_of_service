@@ -38,6 +38,7 @@ use OCP\IRequest;
 use OCP\L10N\IFactory;
 use OCA\TermsOfService\Events\TermsCreatedEvent;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IGroupManager;
 
 class TermsController extends Controller {
 	/** @var IFactory */
@@ -60,6 +61,9 @@ class TermsController extends Controller {
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
 
+	/** @var IGroupManager */
+	private $groupManager;
+
 	public function __construct(string $appName,
 								IRequest $request,
 								IFactory $factory,
@@ -70,7 +74,8 @@ class TermsController extends Controller {
 								CountryDetector $countryDetector,
 								Checker $checker,
 								IConfig $config,
-								IEventDispatcher $eventDispatcher
+								IEventDispatcher $eventDispatcher,
+								IGroupManager $groupManager
 	) {
 		parent::__construct($appName, $request);
 		$this->factory = $factory;
@@ -82,6 +87,7 @@ class TermsController extends Controller {
 		$this->checker = $checker;
 		$this->config = $config;
 		$this->eventDispatcher = $eventDispatcher;
+		$this->groupManager = $groupManager;
 	}
 
 	/**
@@ -115,6 +121,8 @@ class TermsController extends Controller {
 			'languages' => $this->languageMapper->getLanguages(),
 			'tos_on_public_shares' => $this->config->getAppValue(Application::APPNAME, 'tos_on_public_shares', '0'),
 			'tos_for_users' => $this->config->getAppValue(Application::APPNAME, 'tos_for_users', '1'),
+			'tos_on_every_login' => $this->config->getAppValue(Application::APPNAME, 'tos_on_every_login', '0'),
+			'excluded_groups' => $this->config->getAppValue(Application::APPNAME, 'excluded_groups', '[]'),
 		];
 		return new JSONResponse($response);
 	}
@@ -173,5 +181,20 @@ class TermsController extends Controller {
 		$this->eventDispatcher->dispatchTyped($event);
 
 		return new JSONResponse($terms);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 */
+	public function getGroups(IGroupManager $groupManager): JSONResponse {
+		$groups = $groupManager->search('');
+		$groupData = array_map(function ($group) {
+			return [
+				'id' => $group->getGID(),
+				'name' => $group->getDisplayName(),
+			];
+		}, $groups);
+
+		return new JSONResponse(['groups' => $groupData]);
 	}
 }

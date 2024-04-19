@@ -46,5 +46,10 @@ return [
 			'url' => '/sign',
 			'verb' => 'DELETE',
 		],
+		[
+            'name' => 'Terms#getGroups',
+            'url' => '/groups',
+            'verb' => 'GET',
+        ],
 	],
 ];

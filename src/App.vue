@@ -35,6 +35,27 @@
 				{{ t('terms_of_service', 'Show on public shares') }}
 			</NcCheckboxRadioSwitch>
 
+			<p class="settings-hint">
+				{{ t('terms_of_service', 'Prompt users every time they login to sign the ToS again.') }}
+			</p>
+
+			<NcCheckboxRadioSwitch type="switch"
+				:checked.sync="showOnEveryLogin">
+				{{ t('terms_of_service', 'Show on every login') }}
+			</NcCheckboxRadioSwitch>
+
+			<p class="settings-hint">
+				{{ t('terms_of_service', 'Optionally exclude selected groups from the above feature.') }}
+			</p>
+
+			<NcSelect v-if="showOnEveryLogin"
+				v-model="excludedGroups"
+				:options="groupOptions"
+				:placeholder="t('terms_of_service', 'Select any groups to be excluded')"
+				:multiple="true"
+				label="label"
+				track-by="value" />
+
 			<span class="form">
 				<NcSelect v-model="country"
 					:options="countryOptions"
@@ -123,6 +144,7 @@ export default {
 			showForLoggedInUser: true,
 			showOnEveryLogin: false,
 			excludedGroups: [],
+			groupOptions: [],
 		}
 	},
 
@@ -151,6 +173,15 @@ export default {
 				)
 			}
 		},
+		showOnEveryLogin(value) {
+			if (!this.saveButtonDisabled) {
+				OCP.AppConfig.setValue(
+					'terms_of_service',
+					'tos_on_every_login',
+					value ? '1' : '0',
+				)
+			}
+		},
 	},
 
 	mounted() {
@@ -166,6 +197,9 @@ export default {
 				this.languages = response.data.languages
 				this.showOnPublicShares = response.data.tos_on_public_shares === '1'
 				this.showForLoggedInUser = response.data.tos_for_users === '1'
+				// added two new fields to accommodate the new 'prompt every login' feature
+				this.showOnEveryLogin = response.data.tos_on_every_login === '1'
+				this.excludedGroups = response.data.excluded_groups
 				Object.keys(this.countries).forEach((countryCode) => {
 					this.countryOptions.push({
 						value: countryCode,
@@ -184,6 +218,7 @@ export default {
 					this.saveButtonDisabled = false
 				})
 			})
+		this.loadGroups()
 	},
 
 	methods: {
@@ -219,6 +254,18 @@ export default {
 					this.resetButtonDisabled = false
 				})
 		},
+		loadGroups() {
+            axios.get(generateUrl('/apps/terms_of_service/groups'))
+                .then(response => {
+                    this.groupOptions = response.data.groups.map(group => ({
+                        value: group.id,
+                        label: group.name,
+                    }))
+                })
+                .catch(error => {
+                    console.error('Failed to load groups:', error)
+                })
+        },
 	},
 }
 </script>
