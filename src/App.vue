@@ -205,11 +205,11 @@ export default {
 				this.languages = response.data.languages
 				this.showOnPublicShares = response.data.tos_on_public_shares === '1'
 				this.showForLoggedInUser = response.data.tos_for_users === '1'
+
 				// added two new fields to accommodate the new 'prompt every login' feature
 				this.showOnEveryLogin = response.data.tos_on_every_login === '1'
-
 				this.excludedGroups = response.data.excluded_groups
-				
+
 				Object.keys(this.countries).forEach((countryCode) => {
 					this.countryOptions.push({
 						value: countryCode,
@@ -271,9 +271,6 @@ export default {
                         value: group.id,
                         label: group.name,
                     }))
-                })
-                .catch(error => {
-                    console.error('Failed to load groups:', error)
                 })
         },
 	},

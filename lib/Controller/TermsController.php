@@ -40,8 +40,6 @@ use OCA\TermsOfService\Events\TermsCreatedEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IGroupManager;
 
-use Psr\Log\LoggerInterface;
-
 class TermsController extends Controller {
 	/** @var IFactory */
 	private $factory;
@@ -66,9 +64,6 @@ class TermsController extends Controller {
 	/** @var IGroupManager */
 	private $groupManager;
 
-	/** @var LoggerInterface */
-	private $logger;
-
 	public function __construct(string $appName,
 								IRequest $request,
 								IFactory $factory,
@@ -80,8 +75,7 @@ class TermsController extends Controller {
 								Checker $checker,
 								IConfig $config,
 								IEventDispatcher $eventDispatcher,
-								IGroupManager $groupManager,
-								LoggerInterface $logger
+								IGroupManager $groupManager
 	) {
 		parent::__construct($appName, $request);
 		$this->factory = $factory;
@@ -94,7 +88,6 @@ class TermsController extends Controller {
 		$this->config = $config;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->groupManager = $groupManager;
-		$this->logger = $logger;
 	}
 
 	/**
@@ -131,8 +124,6 @@ class TermsController extends Controller {
 			'tos_on_every_login' => $this->config->getAppValue(Application::APPNAME, 'tos_on_every_login', '0'),
 			'excluded_groups' => json_decode($this->config->getAppValue(Application::APPNAME, 'excluded_groups', '[]'), true),
 		];
-		// log the excluded groups and their type
-		$this->logger->info('Excluded groups: ' . json_decode($this->config->getAppValue(Application::APPNAME, 'excluded_groups', '[]'), true) . ' Type: ' . gettype(json_decode($this->config->getAppValue(Application::APPNAME, 'excluded_groups', '[]'), true)));
 		return new JSONResponse($response);
 	}
 
