@@ -187,7 +187,7 @@ export default {
                     'terms_of_service',
                     'excluded_groups',
                     JSON.stringify(newGroups),
-                );
+                )
             }
         },
 	},
