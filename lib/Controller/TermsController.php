@@ -40,6 +40,8 @@ use OCA\TermsOfService\Events\TermsCreatedEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IGroupManager;
 
+use Psr\Log\LoggerInterface;
+
 class TermsController extends Controller {
 	/** @var IFactory */
 	private $factory;
