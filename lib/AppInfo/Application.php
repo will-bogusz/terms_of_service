@@ -69,8 +69,8 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(ShowFormEvent::class, RegistrationIntegration::class);
 		$context->registerEventListener(ValidateFormEvent::class, RegistrationIntegration::class);
 		$context->registerEventListener(PassedFormEvent::class, RegistrationIntegration::class);
-		//$context->registerEventListener(UserLoggedOutEvent::class, UserSessionListener::class);
-		//$context->registerEventListener(UserLoggedInEvent::class, UserSessionListener::class);
+		$context->registerEventListener(UserLoggedOutEvent::class, UserSessionListener::class);
+		$context->registerEventListener(UserLoggedInEvent::class, UserSessionListener::class);
 	}
 
 	public function boot(IBootContext $context): void {
