@@ -183,7 +183,8 @@ export default {
 		},
 		excludedGroups(newGroups) {
             if (!this.saveButtonDisabled) {
-                OCP.AppConfig.setValue(
+                console.log('Saving Excluded Groups:', newGroups)
+				OCP.AppConfig.setValue(
                     'terms_of_service',
                     'excluded_groups',
                     JSON.stringify(newGroups)
@@ -208,6 +209,7 @@ export default {
 				// added two new fields to accommodate the new 'prompt every login' feature
 				this.showOnEveryLogin = response.data.tos_on_every_login === '1'
 				this.excludedGroups = response.data.excluded_groups
+				console.log('Excluded Groups:', this.excludedGroups)
 				Object.keys(this.countries).forEach((countryCode) => {
 					this.countryOptions.push({
 						value: countryCode,
@@ -265,7 +267,8 @@ export default {
 		loadGroups() {
             axios.get(generateUrl('/apps/terms_of_service/groups'))
                 .then(response => {
-                    this.groupOptions = response.data.groups.map(group => ({
+                    console.log('Loaded Group Options:', response.data.groups)
+					this.groupOptions = response.data.groups.map(group => ({
                         value: group.id,
                         label: group.name,
                     }))
