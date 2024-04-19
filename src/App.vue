@@ -121,6 +121,8 @@ export default {
 			resetButtonDisabled: false,
 			showOnPublicShares: false,
 			showForLoggedInUser: true,
+			showOnEveryLogin: false,
+			excludedGroups: [],
 		}
 	},
 
