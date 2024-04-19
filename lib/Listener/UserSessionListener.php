@@ -30,28 +30,30 @@ class UserSessionListener implements IEventListener {
 
     // we may optionally decide to exclude certain user groups from having their ToS signatures reset
     private function isExcludedUser(IUser $user): bool {
-        // placeholder group to use for now, will eventually integrate to pull from the admin settings
-        $excludedGroups = ['management'];
-        $userGroups = $this->groupManager->getUserGroupIds($user);
-        foreach ($excludedGroups as $groupName) {
-            if (in_array($groupName, $userGroups)) {
-                return true;
-            }
+        // pull from the admin settings
+        $excludedGroups = $this->config->getAppValue(Application::APPNAME, 'excluded_groups', '');
+        $excludedGroups = array_filter(array_map('trim', explode(',', $excludedGroups)));
+
+        if (empty($excludedGroups)) {
+            return false;
         }
-        return false;
+
+        $userGroups = $this->groupManager->getUserGroupIds($user);
+        return array_intersect($excludedGroups, $userGroups) !== [];
     }
 
     public function handle(Event $event): void {
-        // align processing of the signature clear to occur before the user logs in or out
-        if ($event instanceof UserLoggedInEvent || $event instanceof UserLoggedOutEvent) {
-            // grab the user that performed the action
-            $user = $event->getUser();
-            if ($this->isExcludedUser($user)) {
-                return;
+        // check if the feature to show on every login is enabled
+        if ($this->config->getAppValue('terms_of_service', 'show_on_every_login', '0') === '1') {
+            // align processing of the signature clear to occur when the user logs in or out
+            if ($event instanceof UserLoggedInEvent || $event instanceof UserLoggedOutEvent) {
+                // grab the user that performed the action
+                $user = $event->getUser();
+                if ($this->isExcludedUser($user)) {
+                    return;
+                }
+                $this->signatoryMapper->deleteSignatoriesByUser($user);
             }
-            $this->signatoryMapper->deleteSignatoriesByUser($user);
-        } else {
-            return;
         }
     }
 }

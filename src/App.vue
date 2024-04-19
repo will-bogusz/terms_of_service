@@ -44,7 +44,7 @@
 				{{ t('terms_of_service', 'Show on every login') }}
 			</NcCheckboxRadioSwitch>
 
-			<p class="settings-hint">
+			<p class="settings-hint" v-if="showOnEveryLogin">
 				{{ t('terms_of_service', 'Optionally exclude selected groups from the above feature.') }}
 			</p>
 
