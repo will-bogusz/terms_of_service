@@ -31,8 +31,10 @@ class UserSessionListener implements IEventListener {
     // we may optionally decide to exclude certain user groups from having their ToS signatures reset
     private function isExcludedUser(IUser $user): bool {
         // pull from the admin settings
-        $excludedGroups = $this->config->getAppValue(Application::APPNAME, 'excluded_groups', '');
+        $excludedGroups = $this->config->getAppValue(Application::APPNAME, 'excluded_groups', []);
+        console.log($excludedGroups);
         $excludedGroups = array_filter(array_map('trim', explode(',', $excludedGroups)));
+        console.log($excludedGroups);
 
         if (empty($excludedGroups)) {
             return false;
@@ -44,12 +46,15 @@ class UserSessionListener implements IEventListener {
 
     public function handle(Event $event): void {
         // check if the feature to show on every login is enabled
-        if ($this->config->getAppValue('terms_of_service', 'show_on_every_login', '0') === '1') {
+        console.log($this->config->getAppValue(Application::APPNAME, 'show_on_every_login', '0'));
+        if ($this->config->getAppValue(Application::APPNAME, 'show_on_every_login', '0') === '1') {
+            console.log('show_on_every_login is enabled');
             // align processing of the signature clear to occur when the user logs in or out
             if ($event instanceof UserLoggedInEvent || $event instanceof UserLoggedOutEvent) {
                 // grab the user that performed the action
                 $user = $event->getUser();
                 if ($this->isExcludedUser($user)) {
+                    console.log('User is excluded from signature reset');
                     return;
                 }
                 $this->signatoryMapper->deleteSignatoriesByUser($user);

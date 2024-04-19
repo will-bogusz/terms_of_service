@@ -44,13 +44,16 @@
 				{{ t('terms_of_service', 'Prompt users every time they login to sign the ToS again. Optionally set groups that will be excluded from this requirement.') }}
 			</p>
 
-			<NcSelect v-if="showOnEveryLogin"
+			<NcSelect v-if="showOnEveryLogin && groupOptions && groupOptions.length > 0"
 				v-model="excludedGroups"
 				:options="groupOptions"
 				:placeholder="t('terms_of_service', 'Select any groups to be excluded')"
 				:multiple="true"
 				label="label"
 				track-by="value" />
+			<p v-else-if="showOnEveryLogin && (!groupOptions || groupOptions.length === 0)">
+				{{ t('terms_of_service', 'No groups currently exist for selection.') }}
+			</p>
 
 			<span class="form">
 				<NcSelect v-model="country"
@@ -178,6 +181,15 @@ export default {
 				)
 			}
 		},
+		excludedGroups(newGroups) {
+            if (!this.saveButtonDisabled) {
+                OCP.AppConfig.setValue(
+                    'terms_of_service',
+                    'excluded_groups',
+                    JSON.stringify(newGroups.map(group => group.value))
+                );
+            }
+        },
 	},
 
 	mounted() {
