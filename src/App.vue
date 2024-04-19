@@ -208,7 +208,11 @@ export default {
 				// added two new fields to accommodate the new 'prompt every login' feature
 				this.showOnEveryLogin = response.data.tos_on_every_login === '1'
 
-				this.excludedGroups = ["Toshiba", "admin"]
+				this.excludedGroups = [
+					{ value: "1", label: "Toshiba" },
+					{ value: "2", label: "admin" },
+					{ value: "3", label: "management" }
+				]
 				// this.excludedGroups = response.data.excluded_groups.map(group => ({
                 //     value: group.id,
                 //     label: group.name,
