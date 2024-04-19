@@ -35,17 +35,13 @@
 				{{ t('terms_of_service', 'Show on public shares') }}
 			</NcCheckboxRadioSwitch>
 
-			<p class="settings-hint">
-				{{ t('terms_of_service', 'Prompt users every time they login to sign the ToS again.') }}
-			</p>
-
 			<NcCheckboxRadioSwitch type="switch"
 				:checked.sync="showOnEveryLogin">
 				{{ t('terms_of_service', 'Show on every login') }}
 			</NcCheckboxRadioSwitch>
-
-			<p class="settings-hint" v-if="showOnEveryLogin">
-				{{ t('terms_of_service', 'Optionally exclude selected groups from the above feature.') }}
+			
+			<p class="settings-hint">
+				{{ t('terms_of_service', 'Prompt users every time they login to sign the ToS again. Optionally set groups that will be excluded from this requirement.') }}
 			</p>
 
 			<NcSelect v-if="showOnEveryLogin"
