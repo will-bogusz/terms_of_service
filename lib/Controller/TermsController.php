@@ -122,7 +122,7 @@ class TermsController extends Controller {
 			'tos_on_public_shares' => $this->config->getAppValue(Application::APPNAME, 'tos_on_public_shares', '0'),
 			'tos_for_users' => $this->config->getAppValue(Application::APPNAME, 'tos_for_users', '1'),
 			'tos_on_every_login' => $this->config->getAppValue(Application::APPNAME, 'tos_on_every_login', '0'),
-			'excluded_groups' => $this->config->getAppValue(Application::APPNAME, 'excluded_groups', []),
+			'excluded_groups' => $this->config->getAppValue(Application::APPNAME, 'excluded_groups', '[]'),
 		];
 		return new JSONResponse($response);
 	}
