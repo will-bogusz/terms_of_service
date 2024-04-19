@@ -36,11 +36,17 @@ class UserSessionListener implements IEventListener {
     // we may optionally decide to exclude certain user groups from having their ToS signatures reset
     private function isExcludedUser(IUser $user): bool {
         // pull from the admin settings
-        $excludedGroups = $this->config->getAppValue(Application::APPNAME, 'excluded_groups', []);
-        $this->logger->info('Excluded groups fetched: ' . json_encode($excludedGroups) . ' Type: ' . gettype($excludedGroups));
-        $excludedGroups = array_filter(array_map('trim', explode(',', $excludedGroups)));
-        $this->logger->info('Excluded groups after processing: ' . json_encode($excludedGroups) . ' Type: ' . gettype($excludedGroups));
+        $excludedGroups = $this->config->getAppValue(Application::APPNAME, 'excluded_groups', '[]');
+        $this->logger->info('Excluded groups fetched: ' . $excludedGroups . ' Type: ' . gettype($excludedGroups));
         
+        // decode the JSON string into an array
+        $excludedGroups = json_decode($excludedGroups, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->logger->error('Failed to parse excluded groups JSON: ' . json_last_error_msg());
+            return false;
+        }
+
+        $this->logger->info('Excluded groups after decoding: ' . json_encode($excludedGroups) . ' Type: ' . gettype($excludedGroups));
 
         if (empty($excludedGroups)) {
             return false;

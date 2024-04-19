@@ -186,7 +186,7 @@ export default {
                 OCP.AppConfig.setValue(
                     'terms_of_service',
                     'excluded_groups',
-                    newGroups
+                    JSON.stringify(newGroups),
                 );
             }
         },
