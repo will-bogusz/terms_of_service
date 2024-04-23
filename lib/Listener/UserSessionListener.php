@@ -56,6 +56,10 @@ class UserSessionListener implements IEventListener {
             if ($event instanceof UserLoggedInEvent || $event instanceof UserLoggedOutEvent) {
                 // grab the user that performed the action
                 $user = $event->getUser();
+                // null check for empty user events, occasionally happens with reboots
+                if ($user === null) {
+                    return;
+                }
                 if ($this->isExcludedUser($user)) {
                     return;
                 }
